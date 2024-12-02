@@ -1,0 +1,8 @@
+SELECT g.Name AS GenreName
+FROM genres AS g
+WHERE (
+    SELECT AVG(t.UnitPrice)
+    FROM tracks AS t
+    WHERE g.GenreId = t.GenreId
+) > 1
+GROUP BY g.Name

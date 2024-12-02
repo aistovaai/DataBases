@@ -1,0 +1,25 @@
+SELECT c.FirstName, c.LastName
+FROM customers AS c
+WHERE (c.FirstName, c.LastName) NOT IN 
+(
+    SELECT e.FirstName, e.LastName
+    FROM employees AS e
+)
+
+
+
+SELECT c.FirstName, c.LastName
+FROM customers AS c
+LEFT JOIN employees AS e ON 
+    (c.FirstName, c.LastName) = (e.FirstName, e.LastName)
+WHERE e.FirstName IS NULL
+
+
+
+SELECT c.FirstName, c.LastName
+FROM customers AS c
+
+EXCEPT
+
+SELECT e.FirstName, e.LastName
+FROM employees AS e

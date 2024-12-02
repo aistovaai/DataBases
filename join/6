@@ -1,0 +1,25 @@
+SELECT c.LastName
+FROM customers AS c
+WHERE 
+(
+	SELECT SUM(si.Quantity) 
+	FROM sales_items AS si 
+	WHERE si.SalesId IN 
+	(
+		SELECT s.SalesId 
+		FROM sales AS s 
+		WHERE s.CustomerId = c.CustomerId
+	)
+) > 30
+
+
+
+SELECT c.LastName
+FROM customers AS c
+WHERE (
+    SELECT SUM(si.Quantity)
+    FROM sales_items AS si
+    JOIN sales AS s ON si.SalesId = s.SalesId
+    WHERE s.CustomerId = c.CustomerId
+) > 30
+GROUP BY c.CustomerId, c.LastName
