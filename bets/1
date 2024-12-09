@@ -1,0 +1,49 @@
+a
+SELECT user_id, COUNT(DISTINCT time) AS visits_before_bet
+FROM LOG
+WHERE bet > 0
+GROUP BY user_id;
+
+
+
+b
+SELECT AVG((win / bet) * 100) AS average_win_percentage
+FROM LOG
+WHERE bet > 0;
+
+
+
+c
+SELECT user_id, SUM(win - bet) AS balance
+FROM LOG
+GROUP BY user_id;
+
+
+
+d
+SELECT geo, SUM(win) / SUM(bet) AS profitability
+FROM LOG
+JOIN USERS ON LOG.user_id = USERS.user_id
+GROUP BY geo
+ORDER BY profitability DESC;
+
+
+e
+SELECT geo, MAX(bet) AS max_bet
+FROM LOG
+JOIN USERS ON LOG.user_id = USERS.user_id
+GROUP BY geo
+ORDER BY max_bet DESC;
+
+
+
+
+f
+SELECT AVG(JULIANDAY(first_bet_time) - JULIANDAY(first_visit_time)) AS avg_time_to_first_bet
+FROM (
+    SELECT MIN(time) AS first_visit_time,
+           MIN(CASE WHEN bet > 0 THEN time END) AS first_bet_time
+    FROM LOG
+    GROUP BY user_id
+) AS first_times
+WHERE first_bet_time IS NOT NULL;
